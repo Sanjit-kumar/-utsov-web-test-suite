@@ -1,0 +1,30 @@
+{
+  "_comment": "UTSOV Website Test Suite — Email Configuration",
+  "_instructions": "Add email addresses to the 'recipients' array. All addresses will receive the test report.",
+
+  "sender": {
+    "email": "sanjitdas83@hotmail.com",
+    "name": "UTSOV Web Test Suite",
+    "smtp_host": "smtp-mail.outlook.com",
+    "smtp_port": 587,
+    "tls": true
+  },
+
+  "recipients": [
+    "sanjitdas83@hotmail.com"
+  ],
+
+  "report": {
+    "subject_prefix": "🪔 UTSOV Website Test Report",
+    "include_failure_screenshots": true,
+    "include_performance_metrics": true,
+    "send_on_pass": true,
+    "send_on_fail": true
+  },
+
+  "schedule": {
+    "run_daily_at": "08:00",
+    "run_nightly_at": "23:00",
+    "timezone": "America/New_York"
+  }
+}

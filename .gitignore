@@ -1,0 +1,8 @@
+node_modules/
+.env
+whatsapp-session/
+.wwebjs_cache/
+test-results/
+*.ps1
+_send_mail.ps1
+_email_body.html

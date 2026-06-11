@@ -1,0 +1,17 @@
+{
+  "_comment": "UTSOV Test Suite — WhatsApp Configuration",
+  "_instructions": "Add the EXACT name of each WhatsApp group you want to message.",
+
+  "groups": [
+    "Utsov - Communication/Marketing bridge team"
+  ],
+
+  "individuals": [],
+
+  "send_on_pass": true,
+  "send_on_fail": true,
+
+  "launch_day": true,
+
+  "_note": "launch_day: when true, the WhatsApp message includes a full numbered list of every test case (one-time launch report). Set to false for normal compact reports after launch day."
+}
