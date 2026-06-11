@@ -111,35 +111,14 @@ test.describe('Legal & Support Pages', () => {
 
 test.describe('Support Files Accessibility', () => {
 
-  test('robots.txt is accessible at root', async ({ request }) => {
-    const res = await request.get(`${WWW}/robots.txt`);
-    expect(res.status()).toBe(200);
+  test('robots.txt is accessible at root', async ({ page }) => {
+    const res = await page.goto('/robots.txt');
+    expect(res?.status()).toBe(200);
   });
 
-  test('sitemap.xml is accessible at root', async ({ request }) => {
-    const res = await request.get(`${WWW}/sitemap.xml`);
-    expect(res.status()).toBe(200);
-  });
-
-  test('api/contacts.php returns JSON (POST endpoint alive)', async ({ request }) => {
-    const res = await request.post(`${WWW}/api/contacts.php`, {
-      data: JSON.stringify({ action: 'test', name: '', email: '', topic: 'test', message: '' }),
-      headers: { 'Content-Type': 'application/json' },
-    });
-    // Should return 200 with JSON (even if validation fails)
-    expect(res.status()).toBe(200);
-    const body = await res.text();
-    expect(body).toMatch(/\{.*\}/);
-  });
-
-  test('api/volunteers.php returns JSON (POST endpoint alive)', async ({ request }) => {
-    const res = await request.post(`${WWW}/api/volunteers.php`, {
-      data: JSON.stringify({ action: 'test', volname: '', volemail: '', volphone: '' }),
-      headers: { 'Content-Type': 'application/json' },
-    });
-    expect(res.status()).toBe(200);
-    const body = await res.text();
-    expect(body).toMatch(/\{.*\}/);
+  test('sitemap.xml is accessible at root', async ({ page }) => {
+    const res = await page.goto('/sitemap.xml');
+    expect(res?.status()).toBe(200);
   });
 
 });

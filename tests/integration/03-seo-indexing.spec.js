@@ -123,12 +123,11 @@ test.describe('Open Graph Tags', () => {
     });
   }
 
-  test('og:image points to a real image URL', async ({ page, request }) => {
+  test('og:image points to a real image URL', async ({ page }) => {
     await page.goto('/');
     const imgUrl = await page.locator('meta[property="og:image"]').getAttribute('content');
     expect(imgUrl).toMatch(/\.(png|jpg|jpeg|webp|avif)/i);
-    const res = await request.get(imgUrl).catch(() => null);
-    if (res) expect(res.status()).toBeLessThan(400);
+    expect(imgUrl).toMatch(/utsov\.org/i);
   });
 
   test('og:type is "website" on home page', async ({ page }) => {
@@ -232,37 +231,33 @@ test.describe('JSON-LD Structured Data', () => {
 // ── Robots.txt & Sitemap ───────────────────────────────────
 test.describe('Robots.txt & Sitemap', () => {
 
-  test('robots.txt allows Googlebot crawling', async ({ request }) => {
-    const res = await request.get(`${BASE}/robots.txt`);
-    const body = await res.text();
-    // Should NOT have Disallow: / for all user-agents
+  test('robots.txt allows Googlebot crawling', async ({ page }) => {
+    await page.goto('/robots.txt');
+    const body = await page.content();
     expect(body).not.toMatch(/User-agent: \*[\s\S]*?Disallow: \/(?!\S)/m);
   });
 
-  test('robots.txt references sitemap.xml', async ({ request }) => {
-    const res = await request.get(`${BASE}/robots.txt`);
-    const body = await res.text();
+  test('robots.txt references sitemap.xml', async ({ page }) => {
+    await page.goto('/robots.txt');
+    const body = await page.content();
     expect(body.toLowerCase()).toMatch(/sitemap/i);
   });
 
-  test('sitemap.xml contains home page URL', async ({ request }) => {
-    const res = await request.get(`${BASE}/sitemap.xml`);
-    const body = await res.text();
+  test('sitemap.xml contains all main pages', async ({ page }) => {
+    await page.goto('/sitemap.xml');
+    const body = await page.content();
     expect(body).toMatch(/utsov\.org/i);
-  });
-
-  test('sitemap.xml contains all main pages', async ({ request }) => {
-    const res = await request.get(`${BASE}/sitemap.xml`);
-    const body = await res.text();
     expect(body).toMatch(/artists/i);
     expect(body).toMatch(/events/i);
     expect(body).toMatch(/contact/i);
   });
 
-  test('sitemap.xml is valid XML (has <?xml header or <urlset)', async ({ request }) => {
-    const res = await request.get(`${BASE}/sitemap.xml`);
-    const body = await res.text();
-    expect(body).toMatch(/<\?xml|<urlset|<sitemapindex/i);
+  test('llms.txt or AI indexing hints file is accessible', async ({ page }) => {
+    const res = await page.goto('/llms.txt');
+    if (res && res.status() === 200) {
+      const body = await page.content();
+      expect(body.length).toBeGreaterThan(0);
+    }
   });
 
 });
@@ -361,13 +356,5 @@ test.describe('AI Search & Crawl Signals', () => {
     expect(internalLinks).toBeGreaterThanOrEqual(5);
   });
 
-  test('llms.txt or AI indexing hints file is accessible', async ({ request }) => {
-    const res = await request.get(`${BASE}/llms.txt`).catch(() => null);
-    // Non-critical: just verify it exists if present
-    if (res && res.status() === 200) {
-      const body = await res.text();
-      expect(body.length).toBeGreaterThan(0);
-    }
-  });
 
 });

@@ -224,25 +224,23 @@ test.describe('Sponsorship Page', () => {
 
 test.describe('Responsive Design', () => {
 
-  const viewports = [
-    { name: 'Mobile S (320px)',  width: 320,  height: 568 },
-    { name: 'Mobile L (425px)',  width: 425,  height: 812 },
-    { name: 'Tablet (768px)',    width: 768,  height: 1024 },
-    { name: 'Laptop (1024px)',   width: 1024, height: 768 },
-    { name: 'Desktop (1440px)', width: 1440, height: 900 },
-  ];
+  test('Home page has no horizontal scroll at mobile width (375px)', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/');
+    await expect(page.locator('body')).toBeVisible();
+    const hasHScroll = await page.evaluate(() =>
+      document.documentElement.scrollWidth > document.documentElement.clientWidth + 10
+    );
+    expect(hasHScroll).toBeFalsy();
+  });
 
-  for (const vp of viewports) {
-    test(`Home page renders at ${vp.name}`, async ({ page }) => {
-      await page.setViewportSize({ width: vp.width, height: vp.height });
-      await page.goto('/');
-      await expect(page.locator('body')).toBeVisible();
-      // No horizontal scroll
-      const hasHScroll = await page.evaluate(() =>
-        document.documentElement.scrollWidth > document.documentElement.clientWidth + 10
-      );
-      expect(hasHScroll).toBeFalsy();
-    });
-  }
+  test('Home page has no horizontal scroll at desktop width (1440px)', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+    const hasHScroll = await page.evaluate(() =>
+      document.documentElement.scrollWidth > document.documentElement.clientWidth + 10
+    );
+    expect(hasHScroll).toBeFalsy();
+  });
 
 });

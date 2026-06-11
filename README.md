@@ -1,6 +1,8 @@
 # UTSOV Website Test Suite
 
-Automated test framework for **https://www.utsov.org** — runs functional, integration, and security tests across Desktop, Android, and Mac browser profiles, then emails a full HTML report and sends a WhatsApp summary to the team.
+Automated test framework for **https://www.utsov.org** — runs functional, integration, and security tests on a Desktop Chrome profile, then emails a full HTML report and sends a WhatsApp summary to the team.
+
+> **Important:** Tests run against the live production server. The suite is designed to use only browser navigation (`page.goto`) — never raw HTTP hammering — to avoid triggering the server's firewall (CSF/ModEvasive on GoDaddy shared hosting). Do **not** add tests that loop direct `request.get()` or `request.post()` calls.
 
 ---
 

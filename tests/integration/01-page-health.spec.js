@@ -184,17 +184,17 @@ test.describe('Hosting & Server', () => {
     expect(server).not.toMatch(/apache\/\d|nginx\/\d|iis\/\d/i);
   });
 
-  test('robots.txt is accessible', async ({ request }) => {
-    const res = await request.get('https://www.utsov.org/robots.txt');
-    expect(res.status()).toBe(200);
-    const body = await res.text();
+  test('robots.txt is accessible', async ({ page }) => {
+    const res = await page.goto('/robots.txt');
+    expect(res?.status()).toBe(200);
+    const body = await page.locator('body, pre').innerText().catch(() => '');
     expect(body.toLowerCase()).toMatch(/user-agent/i);
   });
 
-  test('sitemap.xml is accessible', async ({ request }) => {
-    const res = await request.get('https://www.utsov.org/sitemap.xml');
-    expect(res.status()).toBe(200);
-    const body = await res.text();
+  test('sitemap.xml is accessible', async ({ page }) => {
+    const res = await page.goto('/sitemap.xml');
+    expect(res?.status()).toBe(200);
+    const body = await page.content();
     expect(body).toMatch(/<urlset|<sitemapindex/i);
   });
 
